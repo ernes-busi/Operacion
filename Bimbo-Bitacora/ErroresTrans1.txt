@@ -1,0 +1,147 @@
+Logging initialized using configuration in jar:file:/opt/cloudera/parcels/CDH-5.8.0-1.cdh5.8.0.p0.42/jars/hive-common-1.1.0-cdh5.8.0.jar!/hive-log4j.properties
+WARN: The method class org.apache.commons.logging.impl.SLF4JLogFactory#release() was invoked.
+WARN: Please see http://www.slf4j.org/codes.html#release for an explanation.
+insert into table tmp.btrutatmp_dsdcosta select distinct a.codigo_agencia,a.codigo_ruta,trim(b.cod_linea_ruta) as cod_linea_ruta,b.tipo_ruta ,b.desc_tipo_ruta,b.ruta_de_frio,b.descrip
+cion_ruta,b.codigo_supervisor,b.codigo_vendedor,coalesce(c.desc_linea_ruta,'SIN DESCRIPCION DE RUTA') as desc_linea_ruta,coalesce(d.supv_nm,'SIN DESCRIPCION') as supv_nm from dsdcosta
+_x.agz003 a left join tmp.rutatmp_dsdcosta b on a.codigo_agencia=b.codigo_agencia and trim(a.codigo_ruta)=trim(b.codigo_ruta) left join tmp.linearutatmp_dsdcosta c on trim(b.cod_linea
+_ruta)=trim(c.cod_linea_ruta) left join tmp.supervisortmp_dsdcosta d on b.codigo_supervisor=d.codigo_supervisor and b.codigo_agencia=d.codigo_agencia where a.storeday between '2017-02
+-15' and '2017-02-16';
+2017-02-15 08:39:08,141 WARN  [main] mapreduce.TableMapReduceUtil: The hbase-prefix-tree module jar containing PrefixTreeCodec is not present.  Continuing without it.
+
+Logging initialized using configuration in jar:file:/opt/cloudera/parcels/CDH-5.8.0-1.cdh5.8.0.p0.42/jars/hive-common-1.1.0-cdh5.8.0.jar!/hive-log4j.properties
+FAILED: SemanticException org.apache.hadoop.hive.ql.metadata.InvalidTableException: Table not found btrutatmp_dsdcosta
+WARN: The method class org.apache.commons.logging.impl.SLF4JLogFactory#release() was invoked.
+WARN: Please see http://www.slf4j.org/codes.html#release for an explanation.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+Logging initialized using configuration in jar:file:/opt/cloudera/parcels/CDH-5.8.0-1.cdh5.8.0.p0.42/jars/hive-common-1.1.0-cdh5.8.0.jar!/hive-log4j.properties
+OK
+Time taken: 0.188 seconds
+WARN: The method class org.apache.commons.logging.impl.SLF4JLogFactory#release() was invoked.
+WARN: Please see http://www.slf4j.org/codes.html#release for an explanation.
+CREATE TABLE tmp.legaldsdcosta AS SELECT DISTINCT r.codigo_agencia, r.nombre_agencia, r.codigo_ruta, r.lgl_ent_nbr, r.lgl_ent_nm, r.addr_st_nm, r.ext_addr,r.int_addr, r.tel_nbr, r.prc
+_zone_nbr,r.nbrhd_nm,r.st_nm,r.muni_nm,r.zip_cd, r.cntry_cd, r.country, p.org_id, p.org_cd, p.org_nm, p.cntry_nm, p.codigo_idioma, p.curr_cd, p.curr_nm FROM tmp.btagencydsdcosta r LEF
+T JOIN (SELECT DISTINCT a.cod_pais AS cntry_cd, c.org_id, a.region AS org_cd, c.org_nm, b.cntry_nm, a.codigo_idioma, d.curr_cd, upper(d.curr_nm) AS curr_nm, 'dsdcosta' AS country FROM
+ ftp_files.cat_esquema_bimbo a INNER JOIN ftp_files .xxx_ic_cntry b ON a.cod_pais=b.cntry_cd AND a.region=b.org_cd INNER JOIN ftp_files.xxx_ic_org c ON b.org_cd=c.org_cd LEFT JOIN ftp
+_files.xxx_ic_curr d ON b.cntry_cd=d.cntry_cd WHERE a.nom_agencia LIKE '%dsdcosta%')p ON r.cntry_cd=p.cntry_cd AND r.country=p.country;
+2017-02-15 08:40:02,145 WARN  [main] mapreduce.TableMapReduceUtil: The hbase-prefix-tree module jar containing PrefixTreeCodec is not present.  Continuing without it.
+
+Logging initialized using configuration in jar:file:/opt/cloudera/parcels/CDH-5.8.0-1.cdh5.8.0.p0.42/jars/hive-common-1.1.0-cdh5.8.0.jar!/hive-log4j.properties
+FAILED: SemanticException [Error 10001]: Line 1:340 Table not found 'btagencydsdcosta'
+WARN: The method class org.apache.commons.logging.impl.SLF4JLogFactory#release() was invoked.
+WARN: Please see http://www.slf4j.org/codes.html#release for an explanation.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;;WARN: The method class org.apache.commons.logging.impl.SLF4JLogFactory#release() was invoked.
+WARN: Please see http://www.slf4j.org/codes.html#release for an explanation.
+INSERT INTO TABLE gb_prd_big_t.bt_bus_area partition (country,storeday) SELECT f.codigo_agencia, f.nombre_agencia, f.lgl_ent_nbr, f.lgl_ent_nm, f.codigo_ruta, f.cod_linea_ruta, f.desc
+_linea_ruta, f.tipo_ruta, f.desc_tipo_ruta, f.ruta_de_frio, f.nombre_ruta, f.codigo_supervisor, f.codigo_vendedor, f.grupocanal_id, f.grupocanal_nm, f.sale_chan_cd, f.sale_chan_nm, f.
+cod_linea_ruta AS tiporuta_id, f.rgn_cd, f.rgn_nm, f.mgmt_ofc_cd, f.mgmt_ofc_nm, f.div_cd, f.div_nm, f.cntry_cd, f.cntry_nm, f.org_id, f.org_cd, f.org_nm, f.bus_area_cd, f.bus_area_nm
+, f.curr_cd, f.curr_nm, f.supv_nm, f.addr_st_nm, f.ext_addr, f.int_addr, f.tel_nbr, f.prc_zone_nbr,f.nbrhd_nm,f.st_nm,f.muni_nm,f.zip_cd, f.lang_ind, f.country, f.storeday FROM (SELEC
+T distinct a.codigo_agencia, coalesce(UPPER(b.nombre_agencia),'SIN DESCRIPCION') AS nombre_agencia, a.codigo_ruta, coalesce(upper(a.descripcion_ruta),'SIN DESCRIPCION') AS nombre_ruta
+, a.cod_linea_ruta, a.desc_linea_ruta, a.tipo_ruta, a.desc_tipo_ruta, a.ruta_de_frio, a.descripcion_ruta AS descripcion_ruta, coalesce(a.codigo_supervisor,0) AS codigo_supervisor, a.s
+upv_nm, a.codigo_vendedor, coalesce(b.lgl_ent_nbr,'000') AS lgl_ent_nbr, coalesce(b.lgl_ent_nm,'SIN DESCRIPCION') AS lgl_ent_nm, b.cntry_cd AS cntry_cd, 'dsdcosta' as country, coalesc
+e(e.grupocanal_id,'0') AS grupocanal_id, COALESCE(e.nombregrupocanal,'SIN DESCRIPCION') AS grupocanal_nm, COALESCE(e.canal_id,'0') AS sale_chan_cd, COALESCE(e.nombrecanal,'SIN DESCRIP
+CION') AS sale_chan_nm, coalesce(e.region_id,'SIN DESCRIPCION') AS rgn_cd, coalesce(upper(e.nombreregion),'SIN DESCRIPCION') AS rgn_nm, coalesce(e.gerencia_id,'SIN DESCRIPCION') AS mg
+mt_ofc_cd, coalesce(e.nombregerencia,'SIN DESCRIPCION') AS mgmt_ofc_nm, coalesce(e.division_id,'SIN DESCRIPCION') AS div_cd, coalesce(e.nombredivision,'SIN DESCRIPCION') AS div_nm, b.
+cntry_nm, b.org_id, b.org_cd, b.org_nm, b.curr_cd, b.curr_nm, b.addr_st_nm, b.ext_addr, b.int_addr, b.tel_nbr, b.prc_zone_nbr,b.nbrhd_nm,b.st_nm,b.muni_nm,b.zip_cd, b.codigo_idioma AS
+ lang_ind, coalesce(ba.codigoareanegocio,'000') AS bus_area_cd, coalesce(upper(ba.nombreareanegocio),'SIN DESCRIPCION') AS bus_area_nm, '2017-02-15' AS storeday FROM tmp.btrutatmp_dsd
+costa a LEFT JOIN tmp.legaldsdcosta b ON a.codigo_agencia=b.codigo_agencia and a.codigo_ruta=b.codigo_ruta LEFT JOIN (SELECT DISTINCT entidadlegal_id, trim(upper(tiporuta_id)) AS tipo
+ruta_id, canal_id, grupocanal_id FROM ftp_files.CR_ic_tiporutacanal) c ON trim(a.cod_linea_ruta)=c.tiporuta_id LEFT JOIN ftp_files.CR_ic_estructuraventas e ON a.codigo_agencia=cast(e.
+agencia_id AS int) AND c.canal_id=e.canal_id AND c.grupocanal_id=e.grupocanal_id AND b.lgl_ent_nbr=e.entidadlegal_id LEFT JOIN ftp_files.CR_ic_busareaCR ba ON e.agencia_id=ba.codigoag
+encia AND e.entidadlegal_id=ba.codigoentidadlegal WHERE b.cntry_cd IS NOT NULL )f LEFT JOIN gb_prd_big_t.bt_bus_area b ON f.codigo_agencia=b.facility_cd AND f.codigo_ruta=b.wos_cd WHE
+RE b.facility_cd IS NULL;
+2017-02-15 08:40:15,672 WARN  [main] mapreduce.TableMapReduceUtil: The hbase-prefix-tree module jar containing PrefixTreeCodec is not present.  Continuing without it.
+
+Logging initialized using configuration in jar:file:/opt/cloudera/parcels/CDH-5.8.0-1.cdh5.8.0.p0.42/jars/hive-common-1.1.0-cdh5.8.0.jar!/hive-log4j.properties
+FAILED: SemanticException [Error 10001]: Line 1:2179 Table not found 'btrutatmp_dsdcosta'
+
+2017-02-15 08:47:11,628 WARN  [main] mapreduce.TableMapReduceUtil: The hbase-prefix-tree module jar containing PrefixTreeCodec is not present.  Continuing without it.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Logging initialized using configuration in jar:file:/opt/cloudera/parcels/CDH-5.8.0-1.cdh5.8.0.p0.42/jars/hive-common-1.1.0-cdh5.8.0.jar!/hive-log4j.properties
+WARN: The method class org.apache.commons.logging.impl.SLF4JLogFactory#release() was invoked.
+WARN: Please see http://www.slf4j.org/codes.html#release for an explanation.
+drop table if exists `tmp`.`saletmp_all_dsdcosta`; create table `tmp`.`saletmp_all_dsdcosta` as select a.*,d.curr_cd,d.cntry_cd,er.to_currency,er.from_currency,er.exchng_rate_amt from
+ (select /*+STREAMTABLE (agy004)*/ substr(a.ag03fc,1,10) as sale_dt,a.codigo_agencia,b.no_factura,a.numero,a.codigo_ruta as wos_cd,coalesce(c.cod_linea_ruta,'S/C') as cod_linea_ruta,a
+.clicod as cust_cd,b.codigo_producto as prod_cd,c.ruta_de_frio,a.ag19id,b.cantidad as qty,b.precio as price,(b.cantidad*b.precio) as sale,b.descuento as disc,b.promocion as prom,b.fac
+dsl as facdsl,(b.dif_precio*b.cantidad) as dif_precio,0 as idtipomotivo,'dsdcosta' as country ,'2017-02-15' as storeday from dsdcosta_x.agy003 a inner join dsdcosta_x.agy004 b on cast
+(a.ag03fc as string) = cast(b.ag03fc as string) and cast(a.codigo_agencia as int) = cast(b.codigo_agencia as int) and cast(a.codigo_ruta as int) = cast(b.codigo_ruta as int) and cast(
+a.no_factura as int) = cast(b.no_factura as int) left join dsdcosta_x.ruta c on cast(a.codigo_agencia as int)=cast(c.codigo_agencia as int) and cast(a.codigo_ruta as int)=cast(c.codig
+o_ruta as int) and cast(b.codigo_agencia as int)=cast(c.codigo_agencia as int) and cast(b.codigo_ruta as int)=cast(c.codigo_ruta as int)where a.agency like '%dsdcosta%' and b.agency l
+ike '%dsdcosta%' and a.storeday between '2017-02-15' and '2017-02-16' and b.storeday between '2017-02-15' and '2017-02-16')a left join (select curr_cd,cntry_cd,'dsdcosta' as country f
+rom ftp_files.xxx_ic_curr where cntry_cd like 'CR')d on a.country=d.country left join (select substr(exchng_rate_dt,1,10) as exchng_rate_dt,to_currency , from_currency , max(exchng_ra
+te_amt) as exchng_rate_amt from gb_prd_big_t.bt_exchng_rate where from_currency like 'USD' group by exchng_rate_dt,to_currency , from_currency ) er on a.sale_dt=substr(er.exchng_rate_
+dt,1,10) and d.curr_cd=er.to_currency; insert into table `tmp`.`saletmp_all_dsdcosta` select a.*,d.curr_cd,d.cntry_cd,er.to_currency,er.from_currency,er.exchng_rate_amt from (select /
+*+STREAMTABLE (agz004)*/ substr(a.ag03fc,1,10) as sale_dt,a.codigo_agencia,b.no_factura,a.numero,a.codigo_ruta as wos_cd,coalesce(c.cod_linea_ruta,'S/C') as cod_linea_ruta,a.clicod as
+ cust_cd,b.codigo_producto as prod_cd,c.ruta_de_frio,a.ag19id,b.cantidad as qty,b.precio as price,(b.cantidad*b.precio) as sale,b.descuento as disc,b.promocion as prom,b.facdsl as fac
+dsl,(b.dif_precio*b.cantidad) as dif_precio,0 as idtipomotivo,'dsdcosta' as country ,'2017-02-15' as storeday from dsdcosta_x.agz003 a inner join dsdcosta_x.agz004 b on cast(a.ag03fc
+as string) = cast(b.ag03fc as string) and cast(a.codigo_agencia as int) = cast(b.codigo_agencia as int) and cast(a.codigo_ruta as int) = cast(b.codigo_ruta as int) and cast(a.no_factu
+ra as int) = cast(b.no_factura as int) left join dsdcosta_x.ruta c on cast(a.codigo_agencia as int)=cast(c.codigo_agencia as int) and cast(a.codigo_ruta as int)=cast(c.codigo_ruta as
+int) and cast(b.codigo_agencia as int)=cast(c.codigo_agencia as int) and cast(b.codigo_ruta as int)=cast(c.codigo_ruta as int) where a.agency like '%dsdcosta%' and b.agency like '%dsd
+costa%' and a.storeday between '2017-02-15' and '2017-02-16' and b.storeday between '2017-02-15' and '2017-02-16')a left join (select curr_cd,cntry_cd,'dsdcosta' as country from ftp_f
+iles.xxx_ic_curr where cntry_cd like 'CR')d on a.country=d.country left join (select substr(exchng_rate_dt,1,10) as exchng_rate_dt,to_currency , from_currency , max(exchng_rate_amt) a
+s exchng_rate_amt from gb_prd_big_t.bt_exchng_rate where from_currency like 'USD' group by exchng_rate_dt,to_currency , from_currency ) er on a.sale_dt=substr(er.exchng_rate_dt,1,10)
+and d.curr_cd=er.to_currency; insert into table gb_prd_big_t.bt_sales_wrk PARTITION(country,storeday) select /*+STREAMTABLE (a)*/ a.sale_dt,a.codigo_agencia,a.no_factura,a.numero,a.wo
+s_cd,a.cod_linea_ruta,a.cust_cd,a.prod_cd,a.ruta_de_frio,a.ag19id ,sum(case when a.cod_linea_ruta not in ('EXP','PAOE','PAOEM','PPOE','RFMX') and cast(a.wos_cd as int)<>900 then a.sal
+e else 0 end) as sale ,cast(sum(case when a.cod_linea_ruta not in ('EXP','PAOE','PAOEM','PPOE','RFMX') and cast(a.wos_cd as int)<>900 then a.qty else 0 end) as int) as qty ,sum(case w
+hen a.cod_linea_ruta not in ('EXP','PAOE','PAOEM','PPOE','RFMX') and cast(a.wos_cd as int)<>900 then a.disc else 0 end) as disc ,sum(case when a.cod_linea_ruta not in ('EXP','PAOE','P
+AOEM','PPOE','RFMX') and cast(a.wos_cd as int)<>900 then a.prom else 0 end) as prom ,sum(case when a.cod_linea_ruta not in ('EXP','PAOE','PAOEM','PPOE','RFMX') and cast(a.wos_cd as in
+t)<>900 then a.facdsl else 0 end) as facdsl ,sum(case when a.cod_linea_ruta not in ('EXP','PAOE','PAOEM','PPOE','RFMX') and cast(a.wos_cd as int)<>900 then a.dif_precio else 0 end) as
+ dif_precio ,sum(case when a.cod_linea_ruta in ('EXP','PAOE','PAOEM','PPOE','RFMX') or cast(a.wos_cd as int)=900 then a.sale else 0 end) as sale_recov ,cast(sum(case when a.cod_linea_
+ruta in ('EXP','PAOE','PAOEM','PPOE','RFMX') or cast(a.wos_cd as int)=900 then a.qty else 0 end) as int) as qty_recov ,a.idtipomotivo,a.curr_cd,a.cntry_cd, max(cast(a.exchng_rate_amt
+as decimal(38,4))) as exchng_rate_amt ,'dsdcosta' as country,'2017-02-15' as storeday from (select distinct * from `tmp`.`saletmp_all_dsdcosta` where storeday between '2017-02-15' and
+ '2017-02-16' and country like 'dsdcosta')a left join gb_prd_big_t.bt_sales_wrk F on F.sale_dt=a.sale_dt and cast(F.wos_cd as int)=cast(a.wos_cd as int) and F.codigo_agencia=a.codigo_
+agencia and F.numero=a.numero and F.country=a.country where F.sale_dt is null group by a.sale_dt,a.codigo_agencia,a.no_factura,a.numero,a.wos_cd,a.cod_linea_ruta,a.cust_cd,a.prod_cd,a
+.ruta_de_frio,a.ag19id,a.idtipomotivo,a.curr_cd,a.cntry_cd; insert into table gb_prd_big_t.bt_sale_mtrcs partition (country,storeday) select s.* from (select sd.sale_dt,sd.codigo_agen
+cia,sd.wos_cd,sd.cust_cd,sd.prod_cd,bc.bus_cal_dt,bc.day_year_nbr,bc.wk_year_nbr,bc.mo_year_nbr,bc.year_cal_nbr,sum(sd.sale_net_amt) as sale_net_amt,sum(sd.sale_net_nbr) as sale_net_n
+br,sum(sd.sale_net_amt/coalesce(sd.tc_usd,0)) as sale_net_amt_dls,sum(sd.sale_net_nbr*cast(p.gramaje as double)) as sale_net_nbr_wt,sum(sd.sale_net_nbr*cast(p.gramaje as double)/10000
+) as sale_net_nbr_ton,sum(sd.sale_net_nbr*cast(p.ud_equiv as double)) as sale_net_ud_equiv,sum(sd.sale_gross_amt) as sale_gross_amt,sum(sd.sale_gross_nbr) as sale_gross_nbr,sum(sd.sal
+e_gross_amt/coalesce(sd.tc_usd,0)) as sale_gross_amt_dls,sum(sd.sale_gross_nbr*cast(p.gramaje as double)) as sale_gross_nbr_wt,sum(sd.sale_gross_nbr*cast(p.gramaje as double)/10000) a
+s sale_gross_nbr_ton,sum(sd.sale_gross_nbr*cast(p.ud_equiv as double)) as sale_gross_ud_equiv,sum(sd.sale_comm_net_amt) as sale_comm_net_amt,sum(sd.sale_comm_net_amt/coalesce(sd.tc_us
+d,0)) as sale_net_nbr_dls,sum(sd.sale_rtn_amt) as sale_rtn_amt,sum(sd.sale_rtn_nbr) as sale_rtn_nbr,sum(sd.sale_rtn_amt/coalesce(sd.tc_usd,0)) as sale_rtn_amt_dls,sum(sd.sale_rtn_nbr*
+cast(p.gramaje as double)) as sale_rtn_nbr_wt,sum(sd.sale_rtn_nbr*cast(p.gramaje as double)/10000) as sale_rtn_nbr_ton,sum(sd.sale_rtn_nbr*cast(p.ud_equiv as double)) as sale_rtn_ud_e
+quiv,sum(sd.sale_rej_amt) as sale_rej_amt,sum(sd.sale_rej_nbr) as sale_rej_nbr,sum(sd.sale_rej_amt/coalesce(sd.tc_usd,0)) as sale_rej_amt_dls,sum(sd.sale_rej_nbr*cast(p.gramaje as dou
+ble)) as sale_rej_nbr_wt,sum(sd.sale_rej_nbr*cast(p.gramaje as double)/10000) as sale_rej_nbr_ton,sum(sd.sale_rej_nbr*cast(p.ud_equiv as double)) as sale_rej_ud_equiv,sum(sd.sale_reco
+v_amt_Frio) as sale_recov_amt,sum(sd.sale_recov_unit_nbr_Frio) as sale_recov_unit_nbr,sum(sd.sale_recov_amt_Frio*coalesce(sd.tc_usd,0)) as sale_recov_amt_dls,sum(sd.sale_recov_unit_nb
+r_Frio*cast(p.gramaje as double)) as sale_recov_unit_nbr_wt,sum(sd.sale_recov_unit_nbr_Frio*cast(p.gramaje as double)/10000) as sale_recov_unit_nbr_ton,sum(sd.sale_recov_unit_nbr_Frio
+*cast(p.ud_equiv as double)) as sale_recov_unit_nbr_ud_equiv,sum(sd.sale_recov_dev_amt_Frio) as sale_recov_dev_amt,sum(sd.sale_recov_dev_nbr_Frio) as sale_recov_dev_nbr,sum(sd.sale_re
+cov_dev_amt_Frio*coalesce(sd.tc_usd,0)) as sale_recov_dev_amt_dls,sum(sd.sale_recov_dev_nbr_Frio*cast(p.gramaje as double)) as sale_recov_dev_nbr_wt,sum(sd.sale_recov_dev_nbr_Frio*cas
+t(p.gramaje as double)/10000) as sale_recov_dev_nbr_ton,sum(sd.sale_recov_dev_nbr_Frio*cast(p.ud_equiv as double)) as sale_recov_dev_nbr_ud_equiv,sum(sd.SALE_ALLOW_TYPE_CD_BON_AUT) as
+ SALE_ALLOW_TYPE_CD_BON_AUT,sum(sd.SALE_ALLOW_TYPE_CD_PROM) as SALE_ALLOW_TYPE_CD_PROM,sum(sd.SALE_ALLOW_TYPE_CD_DESC) as SALE_ALLOW_TYPE_CD_DESC,sum(sd.SALE_ALLOW_TYPE_CD_DIF) as SAL
+E_ALLOW_TYPE_CD_DIF,coalesce(sd.tc_usd,0) as tc_usd,p.gramaje as wt_nbr,sd.nombre_agencia ,sd.lgl_ent_nbr ,sd.lgl_ent_nm ,sd.cod_linea_ruta ,sd.wos_nm,sd.grupocanal_id ,sd.nombregrupo
+canal,sd.sale_chan_cd ,sd.sale_chan_nm,sd.rgn_cd ,sd.rgn_nm,sd.mgmt_ofc_cd ,sd.mgmt_ofc_nm,sd.div_cd ,sd.div_nm,sd.cntry_cd ,sd.cntry_nm ,sd.org_cd ,sd.org_nm,sd.bus_area_cd ,sd.bus_a
+rea_nm ,sd.curr_cd ,sd.curr_nm,sd.lang_ind,sd.clinom,sd.country,'2017-02-15' as storeday from (select s.sale_dt,s.codigo_agencia,s.wos_cd,s.cust_cd,s.prod_cd,s.country,sum(case when s
+.ag19id in ('FC','NC','NV') then S.sale-S.prom-S.disc-S.facdsl-s.dif_precio else 0 end) as sale_comm_net_amt, sum(case when s.ag19id in ('FC','NV') then S.sale else 0 end) as sale_gro
+ss_amt, sum(case when s.ag19id in ('FC','NV') then S.qty else 0 end) as sale_gross_nbr, sum(case when s.ag19id in ('FC','NC','NV') then S.sale else 0 end) as sale_net_amt, sum(case wh
+en s.ag19id in ('FC','NC','NV') then S.qty else 0 end) as sale_net_nbr, sum(case when s.ag19id in ('NC') then S.sale*-1 else 0 end) as sale_rtn_amt, sum(case when s.ag19id in ('NC') t
+hen S.qty*-1 else 0 end) as sale_rtn_nbr, sum(case when s.ag19id in ('FC','NV') then S.sale else 0 end) as sale_val_amt, sum(case when s.ag19id in ('FC','NV') then S.qty else 0 end) a
+s sale_pc_nbr, sum(case when s.ag19id in ('NR') then S.sale else 0 end) as sale_rej_amt, sum(case when s.ag19id in ('NR') then S.qty else 0 end) as sale_rej_nbr, sum(case when s.ag19i
+d in ('FC','NC','NV') then S.sale/S.qty else 0 end) as sale_net_prc_amt, sum(case when s.ag19id in ('FC','NC','NV') then s.qty else 0 end ) as sale_recov_unit_nbr_Frio, sum(case when
+s.ag19id in ('FC','NC','NV') then s.sale else 0 end) as sale_recov_amt_Frio, sum(case when s.ag19id in ('NC') then s.qty else 0 end) as sale_recov_dev_nbr_Frio, sum(case when s.ag19id
+ in ('NC') then s.sale else 0 end) as sale_recov_dev_amt_Frio,sum(case when s.disc<>0 then s.disc else 0 end) as SALE_ALLOW_TYPE_CD_BON_AUT,sum(case when s.prom<>0 then s.prom else 0
+end) as SALE_ALLOW_TYPE_CD_PROM,sum(case when s.facdsl<>0 then s.facdsl else 0 end) as SALE_ALLOW_TYPE_CD_DESC,sum(case when s.dif_precio<>0 then s.dif_precio else 0 end) as SALE_ALLO
+W_TYPE_CD_DIF,max(s.exchng_rate_amt) as tc_usd,ba.codigo_ruta ,ba.nombre_agencia ,ba.lgl_ent_nbr ,ba.lgl_ent_nm ,ba.cod_linea_ruta ,ba.wos_nm,ba.grupocanal_id ,ba.nombregrupocanal,ba.
+sale_chan_cd ,ba.sale_chan_nm,ba.rgn_cd ,ba.rgn_nm,ba.mgmt_ofc_cd ,ba.mgmt_ofc_nm,ba.div_cd ,ba.div_nm,ba.cntry_cd ,ba.cntry_nm ,ba.org_cd ,ba.org_nm,ba.bus_area_cd ,ba.bus_area_nm ,b
+a.curr_cd ,ba.curr_nm,ba.lang_ind,c.clinom from gb_prd_big_t.bt_sales_wrk s left join(select ba.facility_cd as codigo_agencia,ba.wos_cd as codigo_ruta ,max(ba.facility_nm) as nombre_a
+gencia ,ba.lgl_ent_nbr ,max(ba.lgl_ent_nm) as lgl_ent_nm ,max(ba.wos_line_cd) as cod_linea_ruta ,max(ba.wos_nm) as wos_nm,ba.chan_grp_cd as grupocanal_id,max(ba.chan_grp_nm) as nombre
+grupocanal,ba.sale_chan_cd ,max(ba.sale_chan_nm) as sale_chan_nm,ba.rgn_cd ,max(ba.rgn_nm) as rgn_nm,ba.mgmt_ofc_cd ,max(ba.mgmt_ofc_nm) as mgmt_ofc_nm,ba.div_cd ,max(ba.div_nm) as di
+v_nm,max(ba.cntry_cd) as cntry_cd ,max(ba.cntry_nm) as cntry_nm ,max(ba.org_cd) as org_cd ,max(ba.org_nm) as org_nm,ba.bus_area_cd ,max(ba.bus_area_nm) as bus_area_nm ,max(ba.curr_cd)
+ as curr_cd ,max(ba.curr_nm) as curr_nm,ba.lang_ind,ba.country from gb_prd_big_t.bt_bus_area ba where ba.country like 'dsdcosta' group by ba.facility_cd,ba.wos_cd,ba.lgl_ent_nbr ,ba.c
+han_grp_cd ,ba.sale_chan_cd ,ba.rgn_cd ,ba.mgmt_ofc_cd ,ba.div_cd,ba.bus_area_cd ,ba.lang_ind,ba.country)ba on cast(s.codigo_agencia as int)=cast(ba.codigo_agencia as int) and cast(s.
+wos_cd as int)=cast(ba.codigo_ruta as int) and s.cod_linea_ruta=ba.cod_linea_ruta and s.country=ba.country left join (select c.clicod,max(c.clinom) as clinom,c.country from gb_prd_big
+_t.bt_cust c where c.country like 'dsdcosta' group by c.clicod, c.country)c on s.cust_cd=c.clicod and s.country=c.country where s.country like 'dsdcosta' and s.storeday between '2017-
+02-15' and '2017-02-16' group by s.sale_dt,s.codigo_agencia,s.wos_cd,s.cust_cd,s.prod_cd,s.country,c.clinom,ba.codigo_ruta ,ba.nombre_agencia ,ba.lgl_ent_nbr ,ba.lgl_ent_nm ,ba.cod_li
+nea_ruta ,ba.wos_nm,ba.grupocanal_id ,ba.nombregrupocanal,ba.sale_chan_cd ,ba.sale_chan_nm,ba.rgn_cd ,ba.rgn_nm,ba.mgmt_ofc_cd ,ba.mgmt_ofc_nm,ba.div_cd ,ba.div_nm,ba.cntry_cd ,ba.cnt
+ry_nm ,ba.org_cd ,ba.org_nm,ba.bus_area_cd ,ba.bus_area_nm ,ba.curr_cd ,ba.curr_nm,ba.lang_ind)SD left join (select prod_cd,max(gramaje) as gramaje,max(ud_equiv) as ud_equiv from gb_p
+rd_big_t.bt_product group by prod_cd)p on sd.prod_cd=cast(p.prod_cd as int) left join (select bus_cal_dt,day_year_nbr,wk_year_nbr,mo_year_nbr,year_cal_nbr from gb_prd_big_t.bt_bus_cal
+)bc on sd.sale_dt=bc.bus_cal_dt where sd.sale_dt=bc.bus_cal_dt group by sd.sale_dt,sd.codigo_agencia,sd.wos_cd,sd.cust_cd,sd.prod_cd,sd.tc_usd,p.gramaje,p.ud_equiv,sd.country,sd.nombr
+e_agencia ,sd.lgl_ent_nbr ,sd.lgl_ent_nm ,sd.cod_linea_ruta ,sd.wos_nm,sd.grupocanal_id ,sd.nombregrupocanal,sd.sale_chan_cd ,sd.sale_chan_nm,sd.rgn_cd ,sd.rgn_nm,sd.mgmt_ofc_cd ,sd.m
+gmt_ofc_nm,sd.div_cd ,sd.div_nm,sd.cntry_cd ,sd.cntry_nm ,sd.org_cd ,sd.org_nm,sd.bus_area_cd ,sd.bus_area_nm ,sd.curr_cd ,sd.curr_nm,sd.lang_ind,sd.clinom,bc.bus_cal_dt,bc.day_year_n
+br,bc.wk_year_nbr,bc.mo_year_nbr,bc.year_cal_nbr )s left join gb_prd_big_t.bt_sale_mtrcs f on s.sale_dt=f.bus_cal_dt and s.codigo_agencia=f.codigo_agencia and s.wos_cd=f.wos_cd and s.
+cust_cd=f.cust_cd and s.prod_cd=f.prod_cd and s.lgl_ent_nbr=f.lgl_ent_nbr and s.country=f.country where f.bus_cal_dt is null; ;
+2017-02-15 08:47:18,423 WARN  [main] mapreduce.TableMapReduceUtil: The hbase-prefix-tree module jar containing PrefixTreeCodec is not present.  Continuing without it.
+
+Logging initialized using configuration in jar:file:/opt/cloudera/parcels/CDH-5.8.0-1.cdh5.8.0.p0.42/jars/hive-common-1.1.0-cdh5.8.0.jar!/hive-log4j.properties
+OK
+Time taken: 0.163 seconds
+FAILED: SemanticException [Error 10001]: Line 1:624 Table not found 'agy003'
